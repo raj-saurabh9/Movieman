@@ -1,8 +1,8 @@
 
-import React , {useState , useEffect} from 'react'
+import React , {useState } from 'react'
 import MovieCard from './MovieCard'
 
-const Search = () => {
+export default function Search() {
 
   const [movies, setMovies] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -21,13 +21,14 @@ const Search = () => {
   const handleSubmit = (e) => {
     console.log(searchTerm)
     if (searchTerm !== '') {
+    
       getMovies(
-        `https://www.omdbapi.com/?t=` +
-          searchTerm + `&apikey=19abdb5e`
+        `https://api.themoviedb.org/3/search/movie?api_key=7b1a8a5fe60642423d25336eb655595d&language=en-US&query=`+ searchTerm+`&page=1&include_adult=false`
       )
       setSearchTerm('')
-      console.log(   `https://www.omdbapi.com/?t=` +
-      searchTerm + `&apikey=19abdb5e`)
+      console.log( `https://api.themoviedb.org/3/search/movie?api_key=7b1a8a5fe60642423d25336eb655595d&language=en-US&query=`+ searchTerm+`&page=1&include_adult=false`
+      )
+    
     } else {
     }
     e.preventDefault()
@@ -49,12 +50,20 @@ const Search = () => {
           />
         </form>
         </div> 
-    
-    ////////////////////////////////8<MovieCard Title={movies.Title}  Plot="{movie.Plot}"  Poster="{movie.Poster}"/>
+        <div className="row">
         
+        {movies
+          .filter((movie) => movie.vote_average)
+          .map((movie) => {
+           return <div className="col-md-4" key={movie.id}>
+            <MovieCard title={movie.title} overview={movie.overview} poster_path = {movie.poster_path} vote_average={movie.vote_average} key={movie.id} />
+           </div>
 
-    </>
+         
+          })}
+      </div>
+       </>
   );
 }
 
-export default Search;
+
